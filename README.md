@@ -7,8 +7,9 @@ Feed it a JD and a folder of resumes → get a ranked shortlist with scores, rat
 ## ✨ Features
 
 - **Multi-format support** — PDF, DOCX, and TXT files for both JDs and resumes
-- **Two-layer scoring** — Fast NLP (TF-IDF + skill overlap) + Gemini AI semantic analysis
+- **Two-layer scoring** — Fast NLP (TF-IDF + skill recall) + Gemini AI semantic analysis
 - **500+ skill taxonomy** — Deterministic skill matching across tech, frameworks, and domains
+- **Modern Web Dashboard** — A full Django frontend for visual drag-and-drop analysis and detailed rationale modals.
 - **Smart caching** — API results are cached so re-runs are free
 - **Rate-limit aware** — Configurable delays + exponential backoff for the free tier
 - **Rich CLI output** — Colour-coded terminal tables with progress bars
@@ -43,17 +44,24 @@ Optionally edit `config.json` to adjust model, weights, or rate-limit delay.
 ### Run
 
 ```bash
-# Basic usage
+# Basic usage via CLI
 python main.py --jd path/to/job_description.pdf --resumes path/to/resumes/
 
-# Show only top 5 candidates
+# Show only top 5 candidates via CLI
 python main.py --jd path/to/jd.txt --resumes path/to/resumes/ --top 5
 
-# Override scoring weights
+# Override scoring weights via CLI
 python main.py --jd path/to/jd.docx --resumes path/to/resumes/ --weights nlp=0.3,ai=0.7
 
 # Verbose logging
 python main.py --jd path/to/jd.txt --resumes path/to/resumes/ -v
+```
+
+### Run Web Dashboard
+```bash
+python manage.py migrate
+python manage.py runserver 8080
+# Open http://localhost:8080 in your browser
 ```
 
 ## 📊 How It Works
@@ -66,7 +74,7 @@ JD + Resumes → Extract Text → Parse Skills → NLP Score → AI Score → Ra
 |---|---|
 | **Extract** | PDF/DOCX/TXT → clean UTF-8 text |
 | **Parse** | Skills taxonomy matching + section detection |
-| **NLP Score** | TF-IDF cosine similarity + Jaccard skill overlap (0–10) |
+| **NLP Score** | TF-IDF cosine similarity + Recall skill overlap (0–10) |
 | **AI Score** | Gemini API semantic relevance scoring (0–10) |
 | **Final Score** | Weighted blend: `0.4 × NLP + 0.6 × AI` (configurable) |
 

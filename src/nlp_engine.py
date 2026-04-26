@@ -46,15 +46,13 @@ def compute_skill_overlap(jd_skills: set, resume_skills: set) -> tuple[float, se
 
     matches = jd_skills & resume_skills
     gaps = jd_skills - resume_skills
-    union = jd_skills | resume_skills
 
-    if not union:
-        return 0.0, set(), set()
-
-    jaccard = len(matches) / len(union)
+    # Calculate Recall metric (matches / required skills) instead of Jaccard
+    # This prevents penalizing candidates for having extra skills.
+    recall = len(matches) / len(jd_skills)
 
     # Normalise to 0–10
-    score = jaccard * 10.0
+    score = recall * 10.0
 
     return score, matches, gaps
 

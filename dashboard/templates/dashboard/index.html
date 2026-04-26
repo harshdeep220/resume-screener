@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Screener Pro</title>
+    <link rel="stylesheet" href="{% static 'dashboard/style.css' %}">
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        window.CSRF_TOKEN = "{{ csrf_token }}";
+    </script>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-logo">
+            <i class="fa-solid fa-file-signature text-primary"></i>
+            <h1>Resume Screener Pro</h1>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" title="NLP vs AI Weighting Settings">
+                <i class="fa-solid fa-sliders"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Dashboard Views -->
+        <div id="view-input" class="view section active">
+            <div class="split-col">
+                <!-- Left: JD -->
+                <div class="card jd-section">
+                    <h2>Job Description</h2>
+                    <p class="subtitle">Enter the requirements for the role.</p>
+                    <textarea id="jd-textarea" placeholder="Paste Job Description here..."></textarea>
+                    <div class="upload-wrapper">
+                        <span class="text-sm text-muted">Or</span>
+                        <label for="jd-upload" class="btn btn-outline btn-sm ml-2">
+                            <i class="fa-solid fa-upload"></i> Upload JD (.pdf/.docx)
+                        </label>
+                        <input type="file" id="jd-upload" class="hidden-input" accept=".pdf,.docx,.txt">
+                        <span id="jd-filename" class="text-xs text-muted ml-2"></span>
+                    </div>
+                </div>
+
+                <!-- Right: Resumes -->
+                <div class="card resumes-section">
+                    <h2>Candidate Resumes</h2>
+                    <p class="subtitle">Upload resumes to screen against the JD.</p>
+                    <div id="drop-zone" class="drop-zone">
+                        <div class="drop-content">
+                            <i class="fa-solid fa-cloud-arrow-up text-primary drop-icon"></i>
+                            <h3 class="text-lg font-medium">Drop candidate resumes here</h3>
+                            <p class="text-sm text-muted mb-3">Supported formats: .pdf, .docx, .txt</p>
+                            <label for="resumes-upload" class="btn btn-secondary">Browse Files</label>
+                            <input type="file" id="resumes-upload" class="hidden-input" multiple accept=".pdf,.docx,.txt">
+                        </div>
+                        <div id="file-counter" class="file-counter hidden">
+                            <span id="file-count-number">0</span> files added
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-footer">
+                <button id="btn-run" class="btn btn-primary btn-lg pulse-hover">
+                    <i class="fa-solid fa-play"></i> Run Screening Pipeline
+                </button>
+            </div>
+        </div>
+
+        <!-- Processing View -->
+        <div id="view-processing" class="view section hidden">
+            <div class="processing-container card">
+                <div class="spinner-wrapper">
+                    <div class="loader"></div>
+                </div>
+                <h2 id="processing-title">Pipeline Running</h2>
+                <div class="progress-bar-container">
+                    <div id="progress-bar" class="progress-bar"></div>
+                </div>
+                <p id="processing-status" class="text-muted mt-3">Processing resume 1 of 50...</p>
+                <p id="processing-detail" class="text-xs text-muted mt-1">Awaiting Gemini API (rate limiting)...</p>
+            </div>
+        </div>
+
+        <!-- Results View -->
+        <div id="view-results" class="view section hidden">
+            <div class="results-header">
+                <h2>Screening Results</h2>
+                <div class="results-actions">
+                    <button class="btn btn-outline btn-sm"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+                    <button class="btn btn-outline btn-sm"><i class="fa-solid fa-code"></i> Export JSON</button>
+                </div>
+            </div>
+            
+            <div class="card table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Candidate Name</th>
+                            <th>NLP Score</th>
+                            <th>AI Score</th>
+                            <th>Final Score</th>
+                            <th class="td-wide">Rationale</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-tbody">
+                        <!-- Populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center mt-4">
+                <button id="btn-new-run" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i> Start New Screening</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Detail Modal -->
+    <div id="detail-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-candidate-name">Candidate Name</h2>
+                <div class="modal-badges">
+                    <span id="modal-final-score" class="badge">Score: 0.0</span>
+                </div>
+                <button id="btn-close-modal" class="icon-btn btn-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body split-col">
+                <!-- Left: PDF Wireframe -->
+                <div class="pdf-wireframe">
+                    <div class="wire-header">
+                        <i class="fa-solid fa-file-pdf text-danger"></i> <span id="modal-filename">resume.pdf</span>
+                    </div>
+                    <div class="wire-content">
+                        <div class="wire-line w-80 h-title"></div>
+                        <div class="wire-line w-40"></div>
+                        <div class="wire-line w-60"></div>
+                        <br>
+                        <div class="wire-line w-30 h-subtitle"></div>
+                        <div class="wire-line w-100"></div>
+                        <div class="wire-line w-100"></div>
+                        <div class="wire-line w-90"></div>
+                        <br>
+                        <div class="wire-line w-30 h-subtitle"></div>
+                        <div class="wire-line w-100"></div>
+                        <div class="wire-line w-80"></div>
+                    </div>
+                </div>
+                
+                <!-- Right: Analysis Details -->
+                <div class="analysis-details">
+                    <div class="detail-section">
+                        <h3><i class="fa-solid fa-robot text-primary"></i> AI Rationale</h3>
+                        <p id="modal-rationale" class="detail-text text-md">Rationale text goes here...</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3><i class="fa-solid fa-check-circle text-success mt-1"></i> Matched Skills</h3>
+                        <div id="modal-matched" class="skill-tags matched">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3><i class="fa-solid fa-circle-xmark text-danger mt-1"></i> Missing Skills</h3>
+                        <div id="modal-missing" class="skill-tags missing">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'dashboard/script.js' %}"></script>
+</body>
+</html>

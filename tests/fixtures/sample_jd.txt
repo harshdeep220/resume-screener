@@ -1,39 +1,27 @@
-Senior Python Developer
+Job brief
+We are looking for a Data Scientist to analyze large amounts of raw information to find patterns that will help improve our company. We will rely on you to build data products to extract valuable business insights.
 
-Company: TechCorp Inc.
-Location: San Francisco, CA (Remote OK)
+In this role, you should be highly analytical with a knack for analysis, math and statistics. Critical thinking and problem-solving skills are essential for interpreting data. We also want to see a passion for machine-learning and research.
 
-About the Role:
-We are looking for a Senior Python Developer to join our backend engineering team. You will design, build, and maintain scalable APIs and data pipelines that power our SaaS platform. The ideal candidate has deep Python expertise, experience with cloud infrastructure, and a passion for clean, testable code.
+Your goal will be to help our company analyze trends to make better decisions.
 
-Required Skills:
-- Python (5+ years)
-- Django or FastAPI
-- PostgreSQL and Redis
-- REST API design
-- Docker and Kubernetes
-- AWS (EC2, S3, Lambda)
-- Git and CI/CD pipelines
-- Unit testing (pytest)
-
-Nice to Have:
-- Experience with machine learning pipelines
-- Kafka or RabbitMQ
-- Terraform
-- GraphQL
-- TypeScript and React (for full-stack contributions)
-
-Responsibilities:
-- Design and implement RESTful APIs for internal and external consumers
-- Build and optimize ETL data pipelines processing millions of records daily
-- Write comprehensive unit and integration tests
-- Participate in code reviews and mentor junior developers
-- Collaborate with product and data science teams
-- Maintain infrastructure as code using Terraform and Docker
-
-Qualifications:
-- B.S. or M.S. in Computer Science or equivalent experience
-- 5+ years of professional software development
-- Strong understanding of software architecture and design patterns
-- Experience with agile development methodologies
-- Excellent communication and teamwork skills
+Responsibilities
+Identify valuable data sources and automate collection processes
+Undertake preprocessing of structured and unstructured data
+Analyze large amounts of information to discover trends and patterns
+Build predictive models and machine-learning algorithms
+Combine models through ensemble modeling
+Present information using data visualization techniques
+Propose solutions and strategies to business challenges
+Collaborate with engineering and product development teams
+Requirements and skills
+Proven experience as a Data Scientist or Data Analyst
+Experience in data mining
+Understanding of machine-learning and operations research
+Knowledge of R, SQL and Python; familiarity with Scala, Java or C++ is an asset
+Experience using business intelligence tools (e.g. Tableau) and data frameworks (e.g. Hadoop)
+Analytical mind and business acumen
+Strong math skills (e.g. statistics, algebra)
+Problem-solving aptitude
+Excellent communication and presentation skills
+BSc/BA in Computer Science, Engineering or relevant field; graduate degree in Data Science or other quantitative field is preferred
