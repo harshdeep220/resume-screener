@@ -1,0 +1,34 @@
+Iris Nakamura
+
+Email: iris.n@email.com | GitHub: github.com/irisnakamura
+
+Summary:
+Python developer and cloud architect with 8 years of experience. Expert in building scalable backend systems and data infrastructure.
+
+Experience:
+
+Staff Engineer — ScaleUp Technologies (2020–Present)
+- Architected event-driven microservices using Python and Kafka
+- Built high-throughput APIs with FastAPI and GraphQL
+- Managed PostgreSQL and Redis clusters on AWS
+- Implemented infrastructure as code with Terraform and Docker
+- Set up Kubernetes deployments with CI/CD via GitHub Actions
+- Mentored team of 5 backend engineers
+
+Senior Backend Developer — DataStream Corp (2017–2020)
+- Designed REST APIs with Django REST Framework
+- Built ETL pipelines processing 10M+ records daily
+- Implemented distributed caching with Redis and Memcached
+- Wrote comprehensive test suites with pytest (98% coverage)
+
+Software Engineer — TechBase (2015–2017)
+- Developed backend services with Flask and SQLAlchemy
+- Managed MySQL and PostgreSQL databases
+- Deployed services on AWS EC2 and Lambda
+
+Education:
+M.S. Computer Science, MIT (2015)
+B.S. Computer Science and Mathematics, Caltech (2013)
+
+Skills:
+Python, Django, FastAPI, Flask, GraphQL, PostgreSQL, Redis, Kafka, AWS, Docker, Kubernetes, Terraform, GitHub Actions, CI/CD, pytest, REST API, Microservices, Linux, Agile, System Design

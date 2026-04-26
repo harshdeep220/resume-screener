@@ -1,0 +1,27 @@
+David Kim
+
+Email: dkim@email.com | Phone: 555-0404
+
+Summary:
+DevOps engineer with 7 years of experience in cloud infrastructure and automation. Expert in AWS, Docker, and Kubernetes.
+
+Experience:
+
+Lead DevOps Engineer — InfraScale (2020–Present)
+- Managed multi-region AWS infrastructure (EC2, ECS, Lambda, S3)
+- Built and maintained Kubernetes clusters with Helm and Istio
+- Automated infrastructure provisioning with Terraform and CloudFormation
+- Implemented CI/CD pipelines using Jenkins and GitHub Actions
+- Set up monitoring with Prometheus, Grafana, and Datadog
+
+DevOps Engineer — CloudNine Solutions (2017–2020)
+- Containerized applications with Docker
+- Managed configuration with Ansible and Puppet
+- Wrote automation scripts in Python and Bash
+- Maintained PostgreSQL and Redis clusters
+
+Education:
+B.S. Computer Engineering, Georgia Tech (2017)
+
+Skills:
+AWS, Docker, Kubernetes, Terraform, Ansible, Jenkins, GitHub Actions, Python, Bash, Linux, PostgreSQL, Redis, Prometheus, Grafana, Helm, CI/CD, Nginx

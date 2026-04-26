@@ -1,0 +1,26 @@
+Bob Martinez
+
+Email: bob.martinez@email.com | LinkedIn: linkedin.com/in/bobmartinez
+
+Summary:
+Full-stack developer with 4 years of experience in Python and JavaScript. Enjoys building end-to-end web applications.
+
+Experience:
+
+Full Stack Developer — WebWorks Agency (2020–Present)
+- Built full-stack applications using Django and React
+- Designed REST APIs consumed by mobile and web clients
+- Created PostgreSQL schemas and wrote complex SQL queries
+- Deployed applications on AWS EC2 with Docker
+- Participated in agile sprints and code reviews
+
+Junior Developer — StartupXYZ (2019–2020)
+- Developed features using Python and Flask
+- Wrote unit tests with pytest
+- Used Git for version control and collaboration
+
+Education:
+B.S. Computer Science, University of Texas at Austin (2019)
+
+Skills:
+Python, JavaScript, TypeScript, React, Django, Flask, PostgreSQL, Docker, AWS, Git, REST API, HTML, CSS, Agile

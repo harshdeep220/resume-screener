@@ -1,0 +1,30 @@
+# Virtual environment
+.venv/
+venv/
+
+# Environment variables
+.env
+
+# Cache (auto-generated)
+cache/
+
+# Output files (auto-generated)
+output/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

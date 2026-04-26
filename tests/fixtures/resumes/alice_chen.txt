@@ -1,0 +1,28 @@
+Alice Chen
+
+Email: alice.chen@email.com | Phone: 555-0101 | GitHub: github.com/alicechen
+
+Summary:
+Experienced backend engineer with 6 years of Python development. Passionate about building scalable APIs and cloud-native applications.
+
+Experience:
+
+Senior Software Engineer — CloudTech Solutions (2021–Present)
+- Designed and maintained RESTful APIs using Django and FastAPI
+- Managed PostgreSQL databases with complex query optimization
+- Deployed services on AWS using Docker and Kubernetes
+- Implemented CI/CD pipelines with GitHub Actions
+- Mentored 3 junior developers
+
+Software Engineer — DataFlow Inc. (2018–2021)
+- Built data pipelines using Python and Apache Airflow
+- Developed microservices with Flask and Redis
+- Wrote comprehensive unit tests with pytest (95% coverage)
+- Managed infrastructure with Terraform
+
+Education:
+M.S. Computer Science, Stanford University (2018)
+B.S. Computer Science, UC Berkeley (2016)
+
+Skills:
+Python, Django, FastAPI, PostgreSQL, Redis, Docker, Kubernetes, AWS, Terraform, Git, pytest, REST API, CI/CD, Agile, Linux

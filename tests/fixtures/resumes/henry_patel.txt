@@ -1,0 +1,25 @@
+Henry Patel
+
+Email: henry.patel@email.com
+
+Summary:
+Mobile developer with 5 years of experience in Android and iOS development.
+
+Experience:
+
+Senior Mobile Developer — AppFactory (2021–Present)
+- Built cross-platform apps using Flutter and React Native
+- Developed native Android apps with Kotlin and Jetpack Compose
+- Implemented REST API clients with Retrofit and Dio
+- Published 3 apps to Google Play Store and Apple App Store
+
+Mobile Developer — MobileFirst Inc. (2019–2021)
+- Developed iOS apps using Swift and SwiftUI
+- Built Android apps with Java and Kotlin
+- Integrated Firebase for authentication and push notifications
+
+Education:
+B.S. Computer Science, UCLA (2019)
+
+Skills:
+Kotlin, Swift, Java, Dart, Flutter, React Native, SwiftUI, Jetpack Compose, Firebase, REST API, Git, Android, iOS, Mobile Development

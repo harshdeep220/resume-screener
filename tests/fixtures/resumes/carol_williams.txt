@@ -1,0 +1,29 @@
+Carol Williams
+
+Email: carol.w@email.com | Portfolio: carolwilliams.dev
+
+Summary:
+Frontend developer with 5 years of experience building modern web interfaces. Specializes in React ecosystem and design systems.
+
+Experience:
+
+Senior Frontend Developer — DesignFirst Corp (2021–Present)
+- Lead development of component library using React and TypeScript
+- Implemented design systems with Storybook and Figma integration
+- Optimized web performance achieving 95+ Lighthouse scores
+- Managed state with Redux and React Query
+
+Frontend Developer — MediaTech (2019–2021)
+- Built responsive web applications with React and Vue.js
+- Created CSS architectures using SASS and Tailwind
+- Wrote end-to-end tests with Cypress and Playwright
+
+Junior Developer — AgencyPro (2018–2019)
+- Developed websites using HTML, CSS, JavaScript
+- Built interactive UIs with jQuery and Bootstrap
+
+Education:
+B.A. Design & Technology, Parsons School of Design (2018)
+
+Skills:
+JavaScript, TypeScript, React, Vue.js, HTML, CSS, SASS, Tailwind, Storybook, Figma, Redux, Cypress, Playwright, Git, Webpack, Vite

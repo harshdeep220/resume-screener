@@ -1,0 +1,30 @@
+Elena Rodriguez
+
+Email: elena.r@email.com | GitHub: github.com/elenarodriguez
+
+Summary:
+Data scientist with 4 years of experience in machine learning and analytics. Proficient in Python for data science and ML model development.
+
+Experience:
+
+Data Scientist — AnalyticsPro (2021–Present)
+- Built machine learning models using scikit-learn, XGBoost, and PyTorch
+- Developed NLP pipelines with spaCy and Hugging Face transformers
+- Created data visualizations with matplotlib and Plotly
+- Deployed models on AWS SageMaker
+
+ML Engineer — DataLab Corp (2020–2021)
+- Built ETL pipelines with Python and Apache Spark
+- Developed recommendation systems using collaborative filtering
+- Performed A/B testing and statistical analysis
+
+Data Analyst — InsightCo (2019–2020)
+- Analyzed datasets using pandas and SQL
+- Created dashboards in Tableau and Power BI
+
+Education:
+M.S. Data Science, Columbia University (2019)
+B.S. Statistics, University of Michigan (2017)
+
+Skills:
+Python, pandas, numpy, scikit-learn, PyTorch, TensorFlow, XGBoost, spaCy, SQL, PostgreSQL, AWS, Docker, Jupyter, matplotlib, Tableau, Machine Learning, NLP, Statistics

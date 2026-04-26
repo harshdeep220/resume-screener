@@ -1,0 +1,33 @@
+# Antigravity Agent Rules (.agentrules)
+
+## 1. Primary Directives & Persona
+- You are an expert Python Engineer building a batch CLI pipeline for an AI-Powered Resume Screener. 
+- **Scope Constraint:** This is strictly an offline batch CLI tool. Do NOT attempt to introduce web frameworks (Flask/FastAPI), real-time streaming, or vector databases.
+- Prioritize graceful degradation over crashing. Follow the documented fallback behaviors strictly.
+
+## 2. Tech Stack Ecosystem
+- **Language:** Python 3.10+
+- **Core Libraries:** `PyMuPDF` (fitz - do NOT use pdfplumber), `python-docx`, `spaCy` (using `en_core_web_sm`), `scikit-learn`, `google-generativeai`, `pandas`, `Rich`, `python-dotenv`.
+- **Testing:** `pytest` and `pytest-cov`.
+
+## 3. Architecture & Implementation Rules
+- **Directory Structure:** Strictly adhere to the separation of concerns outlined in `src/` (`extractor.py`, `jd_parser.py`, `resume_parser.py`, `nlp_engine.py`, `ai_scorer.py`, `scoring_engine.py`, `output.py`).
+- **File Parsing:** - If PyMuPDF returns an empty string (scanned PDF), log a warning and return an empty string. Do NOT crash.
+  - Section detection in `resume_parser.py` is heuristic. If headers aren't found, fallback to using the full text.
+- **NLP Processing:** - The `TfidfVectorizer` MUST be fit once on the entire combined corpus (JD + all resumes), never per-pair.
+  - Normalize the Jaccard skill overlap score to `[0, 10]` before blending.
+- **AI Scoring (Gemini):**
+  - Use `gemini-1.5-flash` by default. 
+  - **Truncation:** Always truncate both JD and resume texts to the configured `max_chars` limit at the last sentence boundary before sending to the API.
+  - **Caching:** API calls MUST be cached in `cache/scores_cache.json` using `sha256(jd_text + resume_text)` as the key.
+  - **Rate Limiting & Errors:** Implement a configurable sleep delay and a 3-retry exponential backoff. If the API completely fails or returns non-JSON, default to a score of `5.0` with an "[API error]" rationale. Do NOT crash.
+
+## 4. Testing Requirements
+- Follow Test-Driven Development (TDD) principles. Write failing tests in the `tests/` directory before implementing features.
+- **API Mocking:** The Gemini API MUST be mocked in all unit and integration tests (e.g., `test_pipeline_e2e.py`) to prevent incurring real API costs or hitting rate limits during CI/CD. 
+- Ensure fixtures (`sample_jd.txt`, `resumes/`) are used consistently for integration testing.
+
+## 5. Blast-Radius Guardrails (Strict)
+- **Zero Destructive Commands:** Never execute destructive git commands (e.g., `git reset --hard`, `git push --force`).
+- **Credentials:** Zero hardcoded credentials. Always read `GOOGLE_API_KEY` from the `.env` file.
+- **Gitignore:** Ensure `.env`, `cache/scores_cache.json`, and everything inside `output/` are ignored in source control.

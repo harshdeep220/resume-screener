@@ -1,0 +1,27 @@
+Frank O'Brien
+
+Email: frank.obrien@email.com
+
+Summary:
+Java enterprise developer with 10 years of experience building large-scale distributed systems.
+
+Experience:
+
+Principal Engineer — EnterpriseSoft (2018–Present)
+- Designed microservices architecture using Spring Boot and Hibernate
+- Managed Oracle and MySQL databases at scale
+- Implemented message queues with RabbitMQ and Apache Kafka
+- Built CI/CD pipelines with Jenkins and Maven
+- Led team of 8 engineers
+
+Senior Java Developer — CorpTech (2014–2018)
+- Developed REST APIs with Spring MVC
+- Wrote integration tests with JUnit and TestNG
+- Used Docker for local development environments
+
+Education:
+M.S. Software Engineering, Carnegie Mellon University (2014)
+B.S. Computer Science, Penn State (2012)
+
+Skills:
+Java, Spring, Spring Boot, Hibernate, Maven, Gradle, Oracle, MySQL, RabbitMQ, Kafka, Docker, Jenkins, Git, REST API, Microservices, JUnit, Agile

@@ -1,0 +1,26 @@
+Grace Liu
+
+Email: grace.liu@email.com | Phone: 555-0707
+
+Summary:
+Backend Python developer with 3 years of experience focused on API development and database design.
+
+Experience:
+
+Backend Developer — APIFirst Inc. (2022–Present)
+- Built REST APIs using FastAPI with automated OpenAPI documentation
+- Designed PostgreSQL schemas with SQLAlchemy ORM
+- Implemented caching layers with Redis
+- Wrote unit and integration tests with pytest
+- Deployed services on AWS using Docker
+
+Junior Developer — CodeStart (2021–2022)
+- Developed web applications with Django
+- Used Git for version control
+- Participated in agile sprints
+
+Education:
+B.S. Computer Science, University of Washington (2021)
+
+Skills:
+Python, FastAPI, Django, PostgreSQL, SQLAlchemy, Redis, Docker, AWS, Git, pytest, REST API, Linux, Agile
