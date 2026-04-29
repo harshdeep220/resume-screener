@@ -7,7 +7,7 @@ Feed it a JD and a folder of resumes → get a ranked shortlist with scores, rat
 ## ✨ Features
 
 - **Multi-format support** — PDF, DOCX, and TXT files for both JDs and resumes
-- **Two-layer scoring** — Fast NLP (TF-IDF + skill recall) + Gemini AI semantic analysis
+- **Two-layer scoring** — Fast NLP (BM25 + skill recall) + Gemini AI semantic analysis
 - **500+ skill taxonomy** — Deterministic skill matching across tech, frameworks, and domains
 - **Modern Web Dashboard** — A full Django frontend for visual drag-and-drop analysis and detailed rationale modals.
 - **Smart caching** — API results are cached so re-runs are free
@@ -74,7 +74,7 @@ JD + Resumes → Extract Text → Parse Skills → NLP Score → AI Score → Ra
 |---|---|
 | **Extract** | PDF/DOCX/TXT → clean UTF-8 text |
 | **Parse** | Skills taxonomy matching + section detection |
-| **NLP Score** | TF-IDF cosine similarity + Recall skill overlap (0–10) |
+| **NLP Score** | BM25 text retrieval score + Recall skill overlap (0–10) |
 | **AI Score** | Gemini API semantic relevance scoring (0–10) |
 | **Final Score** | Weighted blend: `0.4 × NLP + 0.6 × AI` (configurable) |
 
@@ -89,8 +89,7 @@ Edit `config.json`:
   "ai_weight": 0.6,
   "api_delay_seconds": 2,
   "jd_max_chars": 2000,
-  "resume_max_chars": 2000,
-  "tfidf_max_features": 500
+  "resume_max_chars": 2000
 }
 ```
 
@@ -112,25 +111,28 @@ pytest tests/ --cov=src --cov-report=term
 ```
 resume_screener/
 ├── main.py                    # CLI entry point
+├── manage.py                  # Django server management
 ├── config.json                # Scoring weights and settings
-├── requirements.txt
+├── requirements.txt           # Python dependencies
 ├── .env                       # GOOGLE_API_KEY (gitignored)
-├── src/
+├── screener_web/              # Django core configuration
+├── dashboard/                 # Django web UI app
+│   ├── templates/             # HTML files (index.html)
+│   ├── static/                # CSS and JS (style.css, script.js)
+│   └── views.py               # Backend endpoint for pipeline execution
+├── src/                       # Core Pipeline Logic
 │   ├── extractor.py           # PDF/DOCX/TXT → clean text
 │   ├── jd_parser.py           # JD → JDProfile
 │   ├── resume_parser.py       # Resume → ResumeProfile
-│   ├── nlp_engine.py          # TF-IDF + skill overlap scoring
+│   ├── nlp_engine.py          # BM25 + skill overlap scoring
 │   ├── ai_scorer.py           # Gemini API integration
 │   ├── scoring_engine.py      # Weighted blend + ranking
 │   └── output.py              # Rich table + CSV/JSON export
-├── data/
-│   └── skills_taxonomy.json   # ~500 curated skills
+├── input/                     # Default storage for uploaded resumes and JDs
+├── data/                      # ~500 curated skills taxonomy
 ├── cache/                     # Auto-generated API cache
-├── output/                    # Auto-generated exports
-└── tests/
-    ├── unit/                  # Fast unit tests
-    ├── integration/           # Pipeline integration tests
-    └── fixtures/              # Sample JD + 10 resumes
+├── output/                    # Auto-generated CLI exports
+└── tests/                     # Pytest suite and fixtures
 ```
 
 ## ⚠️ Known Limitations
