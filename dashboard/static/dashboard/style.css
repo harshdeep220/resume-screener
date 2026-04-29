@@ -277,3 +277,14 @@ textarea:focus { outline: none; border-color: var(--clr-primary); box-shadow: 0 
 .tag { padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); font-size: 0.875rem; font-weight: 500; }
 .matched .tag { background: var(--clr-success-bg); color: var(--clr-success); border: 1px solid #a7f3d0; }
 .missing .tag { background: var(--clr-danger-bg); color: var(--clr-danger); border: 1px solid #fecaca; }
+
+/* Settings Modal Override */
+#settings-modal .modal-content {
+    max-width: 420px;
+    height: auto;
+    max-height: 80vh;
+}
+#settings-modal .modal-body {
+    padding: 1.5rem 2rem;
+    overflow: visible;
+}
