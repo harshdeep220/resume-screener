@@ -25,14 +25,55 @@ document.addEventListener('DOMContentLoaded', () => {
     // Results elements
     const resultsTbody = document.getElementById('results-tbody');
     const btnNewRun = document.getElementById('btn-new-run');
+    const btnExportCsv = document.getElementById('btn-export-csv');
+    const btnExportJson = document.getElementById('btn-export-json');
     
     // Modal elements
     const detailModal = document.getElementById('detail-modal');
     const btnCloseModal = document.getElementById('btn-close-modal');
     
+    // Settings Modal
+    const settingsModal = document.getElementById('settings-modal');
+    const btnOpenSettings = document.getElementById('btn-open-settings');
+    const btnCloseSettings = document.getElementById('btn-close-settings');
+    const nlpWeightRange = document.getElementById('nlp-weight-range');
+    const aiWeightRange = document.getElementById('ai-weight-range');
+    const nlpWeightVal = document.getElementById('nlp-weight-val');
+    const aiWeightVal = document.getElementById('ai-weight-val');
+    
     // State
     let selectedResumes = [];
     let selectedJDFile = null;
+    let currentResults = [];
+    
+    // --- Settings Logic ---
+    btnOpenSettings.addEventListener('click', () => {
+        settingsModal.classList.add('active');
+    });
+    btnCloseSettings.addEventListener('click', () => {
+        settingsModal.classList.remove('active');
+    });
+    settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) {
+            settingsModal.classList.remove('active');
+        }
+    });
+    
+    nlpWeightRange.addEventListener('input', (e) => {
+        let val = parseFloat(e.target.value);
+        nlpWeightVal.textContent = val.toFixed(1);
+        let aiVal = 1.0 - val;
+        aiWeightRange.value = aiVal;
+        aiWeightVal.textContent = aiVal.toFixed(1);
+    });
+
+    aiWeightRange.addEventListener('input', (e) => {
+        let val = parseFloat(e.target.value);
+        aiWeightVal.textContent = val.toFixed(1);
+        let nlpVal = 1.0 - val;
+        nlpWeightRange.value = nlpVal;
+        nlpWeightVal.textContent = nlpVal.toFixed(1);
+    });
     
     // --- File Handling ---
     jdUpload.addEventListener('change', (e) => {
@@ -109,6 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (jdTextarea.value.trim()) {
             formData.append("jd_text", jdTextarea.value.trim());
         }
+        formData.append("nlp_weight", nlpWeightRange.value);
+        formData.append("ai_weight", aiWeightRange.value);
         
         selectedResumes.forEach(file => {
             formData.append("resume_files", file);
@@ -130,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
+            currentResults = data.results;
             setTimeout(() => showResults(data.results), 500);
             
         } catch (err) {
@@ -155,14 +199,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     btnNewRun.addEventListener('click', () => {
+        // Clear all state
         selectedResumes = [];
         selectedJDFile = null;
+        currentResults = [];
+        
+        // Reset inputs
         jdFilename.textContent = "";
         jdTextarea.value = "";
+        jdUpload.value = '';
+        resumeInput.value = '';
+        
         fileCounter.classList.add('hidden');
         fileCountNumber.textContent = "0";
-        switchView(viewInput);
         progressBar.style.width = '0%';
+        switchView(viewInput);
     });
     
     function showResults(dataArray) {
@@ -186,6 +237,36 @@ document.addEventListener('DOMContentLoaded', () => {
         
         switchView(viewResults);
     }
+    
+    // --- Export Logic ---
+    btnExportJson.addEventListener('click', () => {
+        if (!currentResults || currentResults.length === 0) return;
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentResults, null, 2));
+        const anchor = document.createElement('a');
+        anchor.href = dataStr;
+        anchor.download = "screening_results.json";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+    });
+
+    btnExportCsv.addEventListener('click', () => {
+        if (!currentResults || currentResults.length === 0) return;
+        const headers = ["Rank", "Candidate Name", "File", "NLP Score", "AI Score", "Final Score", "Rationale"];
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += headers.join(",") + "\r\n";
+        currentResults.forEach(r => {
+            let rationale = r.rationale.replace(/"/g, '""'); // Escape quotes for CSV
+            let row = [r.rank, `"${r.name}"`, `"${r.file}"`, r.nlp, r.ai, r.final, `"${rationale}"`];
+            csvContent += row.join(",") + "\r\n";
+        });
+        const anchor = document.createElement('a');
+        anchor.href = encodeURI(csvContent);
+        anchor.download = "screening_results.csv";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+    });
     
     // Modal Logic
     function openModal(data) {
