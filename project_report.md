@@ -1,81 +1,71 @@
-# Project Report: AI-Powered Resume Screener Pro
+# Project Report: AI-Powered Resume Screener
 
-## 1. Project Overview
-**Resume Screener Pro** is an automated HR utility designed to parse, analyze, and rank candidate resumes against a specific Job Description (JD). It bridges the gap between deterministic NLP analysis and generative AI reasoning, providing HR professionals with a ranked shortlist of candidates accompanied by detailed, explainable rationales.
+## Abstract
+This project report details the development of an AI-Powered Resume Screener, an automated HR tool designed to streamline the recruitment process. The system accepts a job description (JD) and a directory of applicant resumes, extracts and normalises text across various file formats (PDF, DOCX, TXT), and scores each candidate. It employs a two-layer scoring mechanism: a fast Natural Language Processing (NLP) layer for keyword and skill overlap, followed by a semantic relevance scoring layer utilizing Google's Gemini AI. The tool features a modern Django-based web dashboard for visual analysis and a rich Command Line Interface (CLI), ultimately generating a ranked shortlist of candidates with justifiable rationales and exportable results.
 
-Originally developed as a CLI application, it has been fully migrated into a modern, responsive web application powered by **Django**, allowing for easy drag-and-drop interactions, interactive modals, and localized data caching.
+## Introduction
+### Context
+The recruitment process often involves sifting through hundreds of resumes for a single job posting, making manual screening a time-consuming and bias-prone task. Automated applicant tracking systems exist, but many rely solely on rigid keyword matching, failing to understand the contextual relevance of a candidate's experience.
 
----
+### Problem Addressed
+HR professionals need a fast, cost-effective, and intelligent way to rank candidates. Pure keyword matching misses semantic context, while processing every resume through a Large Language Model (LLM) is computationally expensive and slow due to rate limits. Furthermore, candidates use varied resume formats, requiring robust text extraction.
 
-## 2. Tech Stack
+### Objectives
+- Build an automated resume screening pipeline supporting multiple document formats (PDF, DOCX, TXT).
+- Implement a hybrid scoring system blending fast NLP keyword extraction (BM25/TF-IDF) with advanced LLM semantic analysis.
+- Provide clear, AI-generated rationales for each candidate's score to ensure transparency.
+- Offer both a rich CLI interface for offline batch processing and a Django-powered web dashboard for interactive analysis.
+- Ensure cost efficiency and rate-limit compliance by implementing smart caching and using an optimal LLM model (Gemini 1.5 Flash).
 
-### Core Logic & NLP
-* **Python 3.10+**: The primary programming language.
-* **spaCy (`en_core_web_sm`)**: Used for robust text extraction and lemmatized skill matching.
-* **rank-bm25**: Industry-standard algorithm used for text retrieval and document similarity (replaces older TF-IDF methods).
-* **PyPDF2 & python-docx**: Libraries used for extracting raw text from `.pdf` and `.docx` file formats.
+## Methodology
+### High-Level Approach
+The system follows a sequential pipeline:
+1. **Input & Extraction**: Accepts the JD and resumes, converting them into clean Unicode text.
+2. **Parsing & Taxonomy Matching**: Uses a curated taxonomy of over 500 skills to deterministically extract required skills from the JD and matched skills from the resumes.
+3. **NLP Scoring Layer**: Calculates a deterministic score using Jaccard similarity for skill set overlap and TF-IDF cosine similarity for overall keyword matching.
+4. **AI Scoring Layer**: Sends a truncated version of the JD and each resume to the Google Gemini API to assess semantic relevance and generate a one-sentence rationale.
+5. **Weighted Aggregation**: Blends the NLP score and AI score using configurable weights to produce a final ranking.
 
-### Artificial Intelligence
-* **Google GenAI SDK (`google-genai`)**: The official SDK used to interface with Google's Gemini models.
-* **Model**: `gemini-3.1-flash-lite-preview` (Configurable via `config.json`). Used for deep semantic scoring and rationale generation.
+### Design Patterns & Heuristics
+- **Fallback Section Detection**: If standard resume headers (e.g., "Experience", "Education") are missing, the system falls back to evaluating the entire document, ensuring no candidate is unfairly penalized for unconventional formatting.
+- **Batched TF-IDF**: The TF-IDF vectorizer is fit across the entire corpus of resumes for a given run, correctly weighting terms that are rare across the specific applicant pool.
+- **Smart Caching**: API responses are cached using a SHA-256 hash of the combined JD and resume text, making subsequent re-evaluations free and instantaneous.
 
-### Web Infrastructure
-* **Django 5.0+**: The core web framework handling routing, file uploads, and synchronous execution of the Python pipeline.
-* **Vanilla HTML/CSS/JS**: A custom, dependency-free frontend using modern CSS variables, flexbox/grid layouts, and vanilla JavaScript for DOM manipulation.
-* **SQLite3**: Django's default database (currently unused for persistent storage, as the app relies on ephemeral filesystem states).
+## Implementation
+### Architecture & Key Components
+- **Text Extractor (`src/extractor.py`)**: Utilizes `PyMuPDF` for fast, pure-Python PDF extraction and `python-docx` for Word documents, including table parsing.
+- **JD & Resume Parsers (`src/jd_parser.py`, `src/resume_parser.py`)**: Uses `spaCy` for lemmatization and tokenization to extract keywords and sections. Matches text against a curated JSON skills taxonomy.
+- **NLP Engine (`src/nlp_engine.py`)**: Implements Jaccard similarity and a `scikit-learn` `TfidfVectorizer` to compute the `nlp_score` (0-10).
+- **AI Scorer (`src/ai_scorer.py`)**: Integrates with `google-generativeai` (Gemini 1.5 Flash). Includes exponential backoff, rate limiting (delaying requests to respect the 15 RPM free-tier limit), and text truncation (limiting payloads to 2000 characters).
+- **Web Dashboard (`dashboard/views.py` & `screener_web/`)**: A Django application providing a modern, user-friendly frontend for interacting with the screening pipeline, displaying results visually, and handling file uploads/exports.
+- **Output Module (`src/output.py`)**: Uses the `Rich` library for colour-coded terminal tables and `pandas` for CSV and JSON data exports.
 
----
+### Technologies
+- **Core**: Python 3.10+
+- **NLP & Extraction**: `spaCy`, `PyMuPDF`, `python-docx`
+- **Machine Learning**: `scikit-learn`
+- **AI Integration**: Google AI Studio (`google-generativeai` with Gemini 1.5 Flash)
+- **Web Framework**: Django
+- **Data Manipulation & CLI**: `pandas`, `Rich`
 
-## 3. How the Pipeline Works
+## Results (Expected/Inferred)
+- **Efficiency**: The system significantly reduces manual screening time. A batch of 50 resumes can be processed and ranked in approximately 2 minutes (due to API rate limiting), with subsequent runs completing instantly due to caching.
+- **Accuracy**: The two-layer approach mitigates the risk of missing highly qualified candidates who use different terminology (handled by Gemini) while ensuring baseline technical requirements are met (handled by NLP skill matching).
+- **Usability**: The provision of both a visual web dashboard and a comprehensive CLI allows flexibility for different user personas (e.g., non-technical recruiters vs. technical hiring managers). Outputs include transparent rationales, preventing the "black box" problem of AI screening.
 
-The application follows a strictly defined, multi-stage pipeline:
+## Conclusion (Inferred)
+The AI-Powered Resume Screener successfully bridges the gap between traditional applicant tracking systems and modern generative AI. By intelligently combining deterministic NLP techniques with the semantic understanding of Large Language Models, the project delivers a robust, cost-effective, and highly scalable solution for initial applicant triaging. The deliberate design choices—such as caching, fallback parsing mechanisms, and a dual-interface approach—result in a production-ready tool that respects both computational limits and real-world resume variability.
 
-1. **Ingestion & Extraction (`src/extractor.py`)**
-   The user uploads a JD and a batch of resumes via the UI. Django saves these to the `input/` folder. The extractor engine determines the file type (PDF, DOCX, TXT) and pulls raw UTF-8 text from the documents, stripping out unreadable formatting.
+## Future Scope (Inferred)
+- **Optical Character Recognition (OCR)**: Integrating libraries like `pytesseract` to support image-based or scanned PDFs, which currently fail text extraction.
+- **Dynamic Skill Taxonomy**: Upgrading the static JSON taxonomy to a dynamic system or utilizing an LLM to auto-extract and categorize new, unrecognized skills dynamically.
+- **Enhanced Document Context**: Transitioning to models with larger context windows or implementing Retrieval-Augmented Generation (RAG) to evaluate very long documents without truncation.
+- **Bias Auditing Module**: Adding a layer to analyze the AI's rationales for potential unconscious biases regarding age, gender, or educational background.
 
-2. **Parsing & Skill Matching (`src/jd_parser.py` & `src/resume_parser.py`)**
-   The system loads a static JSON dictionary of ~500 tech industry skills. Using `spaCy`'s lemmatization, it scans the JD and resumes for these specific skills, identifying exactly what is required versus what the candidate actually possesses.
-
-3. **Deterministic NLP Scoring (`src/nlp_engine.py`)**
-   This stage assigns a baseline score (0.0 - 10.0) without calling any external APIs:
-   * **Skill Recall**: Evaluates what percentage of the JD's required skills were explicitly found in the resume (`matches / required_skills`).
-   * **BM25 Text Retrieval**: Treats the JD as a search query and ranks the resumes based on keyword saturation and document length normalization, scaling the batch relatively from 0 to 10.
-   * *These two scores are blended 50/50 to create the final `nlp_score`.*
-
-4. **Generative AI Semantic Scoring (`src/ai_scorer.py`)**
-   The raw text of the JD and the resume are injected into a highly specific system prompt and sent to Google Gemini. The AI is instructed to return a strictly formatted JSON response containing a numerical score (0-10) and a brief rationale explaining *why* it assigned that score based on the candidate's nuanced experience. Responses are cached locally to save API quotas on subsequent runs.
-
-5. **Final Aggregation (`src/scoring_engine.py`)**
-   The deterministic NLP score and the subjective AI score are combined using a weighted formula (e.g., `0.4 * NLP + 0.6 * AI`). The final results are sorted descending by score and returned to the frontend.
-
----
-
-## 4. Architecture & File Registry
-
-### Web Application (Django)
-* `manage.py`: The command-line utility for Django (used to run the server).
-* `screener_web/`: The Django project core containing settings, ASGI/WSGI configs, and primary URL routing.
-* `dashboard/views.py`: The primary API controller. It exposes a `POST /run-pipeline/` endpoint that accepts multipart form data, triggers the `src/` pipeline, and returns JSON results.
-* `dashboard/templates/dashboard/index.html`: The single-page application layout.
-* `dashboard/static/dashboard/style.css`: The styling system utilizing a custom slate-grey and primary blue theme.
-* `dashboard/static/dashboard/script.js`: Handles drag-and-drop file state, POST requests via Fetch API, progress bar animations, and the pop-up results modal.
-
-### Core Pipeline (`src/`)
-* `extractor.py`: Utility functions utilizing `PyPDF2` and `docx` to yield raw text.
-* `jd_parser.py`: Generates a `JDProfile` dataclass containing the raw text and extracted skill sets.
-* `resume_parser.py`: Generates a `ResumeProfile` dataclass containing the raw text, candidate name, and extracted skills.
-* `nlp_engine.py`: Contains the algorithms for Skill Recall and BM25 batch scoring.
-* `ai_scorer.py`: Manages the API connection, handles rate-limit backoffs (HTTP 429), strictly enforces JSON schema extraction via Regex, and handles local caching.
-* `scoring_engine.py`: Defines the `CandidateResult` dataclass and blends the dual-layer scoring architectures.
-
-### System Assets
-* `config.json`: The global configuration file where users can set weighting (`nlp_weight`, `ai_weight`), select the AI model, and define API delay throttles.
-* `data/skills_taxonomy.json`: The static knowledge base of recognizable industry skills.
-
----
-
-## 5. Security & Limitations
-
-* **API Exposure**: The `GOOGLE_API_KEY` is loaded securely via a `.env` file and is never exposed to the frontend browser. 
-* **State Management**: Uploaded resumes are stored ephemerally in `input/resumes/`. The folder is wiped at the start of every new run to prevent data bloating, meaning long-term persistence requires external storage.
-* **Rate Limiting**: Because free-tier LLM APIs are highly restricted (e.g., 15 requests per minute), the system intentionally introduces an `api_delay_seconds` thread sleep between consecutive resume evaluations. Processing large batches requires patience.
+## References
+- Google AI Studio (Gemini SDK): https://aistudio.google.com/
+- PyMuPDF Documentation: https://pymupdf.readthedocs.io/
+- scikit-learn Documentation: https://scikit-learn.org/
+- spaCy Documentation: https://spacy.io/
+- Django Framework: https://www.djangoproject.com/
+- Rich CLI Library: https://rich.readthedocs.io/
